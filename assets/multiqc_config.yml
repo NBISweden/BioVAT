@@ -79,4 +79,3 @@ sp:
       - "COMMAND:"
       - "samtools markdup"
     num_lines: 2
-
