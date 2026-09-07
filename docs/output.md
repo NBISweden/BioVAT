@@ -13,6 +13,8 @@ results/
 ├── 02_read_trimming
 ├── 03_read_alignment
 │   └── qc
+├── 04_merged_samples
+│   └── qc
 ├── multiqc
 │   ├── multiqc_data
 │   └── multiqc_plots
@@ -27,6 +29,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [Read trimming](#read-trimming) - Adapter and quality trimming of raw reads
 - [Alignment](#alignment) - Alignment of raw or trimmed reads
 - [Alignment quality checks](#Alignment-qc) - BAM/CRAM alignment QC
+- [Merging] - Alignment files are merged at the sample level
 - [MultiQC](#multiqc) - Aggregate report describing results and QC from the whole pipeline
 - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
 
@@ -66,7 +69,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 - `03_read_alignment/`
   - `*.bam`: BAM file produced when running either the `bwa-mem3` or `parabricks` aligner (sorted and read-group tagged).
-  - `*.csi`: CSI index written alongside the BAM output.
+  - `*.bam.csi`: CSI index written alongside the BAM output.
 
 Running with `--enable_cram_format` will produce `.cram` and `.crai` files instead.
 
@@ -97,6 +100,14 @@ Alignment QC executes at several workflow stages. The outputs will be in the dir
       - `*.flagstat`: samtools flagstat report per sample.
 
 </details>
+
+### Merging
+
+- `04_merged_samples/`
+  - `*.bam`: Merged alignment files at the sample level.
+  - `*.bam.csi`: Index file.
+
+Running with `--enable_cram_format` will produce `.cram` and `.crai` files instead.
 
 ### MultiQC
 
