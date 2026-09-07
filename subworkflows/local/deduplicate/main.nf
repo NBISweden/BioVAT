@@ -24,6 +24,7 @@ workflow DEDUPLICATE {
         ch_deduplicated_alignments_indexed = PICARD_MARKDUPLICATES.out.bam
             .mix(PICARD_MARKDUPLICATES.out.cram)
             .join(SAMTOOLS_INDEX.out.index)
+        ch_deduplication_metrics           = PICARD_MARKDUPLICATES.out.metrics
         ch_multiqc_files = ch_multiqc_files
             .mix(PICARD_MARKDUPLICATES.out.metrics.map { _meta, file -> file })
     } else if ( duplicate_marker == 'samtools' ) {
@@ -34,12 +35,14 @@ workflow DEDUPLICATE {
         ch_bam  = SAMTOOLS_SORMADUP.out.bam.join(SAMTOOLS_SORMADUP.out.csi)
         ch_cram = SAMTOOLS_SORMADUP.out.cram.join(SAMTOOLS_SORMADUP.out.crai)
         ch_deduplicated_alignments_indexed = ch_bam.mix(ch_cram)
+        ch_deduplication_metrics           = SAMTOOLS_SORMADUP.out.metrics
         ch_multiqc_files = ch_multiqc_files
             .mix(SAMTOOLS_SORMADUP.out.metrics.map { _meta, file -> file })
     }
 
     emit:
     ch_deduplicated_alignments_indexed
+    ch_deduplication_metrics
     ch_multiqc_files
 
 }

@@ -46,6 +46,16 @@ module_order:
       anchor: "qualimap_sample"
       path_filters:
         - "*sample_*"
+  - picard:
+      name: "Picard: duplicate marking metrics"
+      anchor: "picard_markduplicates"
+      path_filters:
+        - "*_dedup*"
+  - samtools:
+      name: "Samtools markdup: duplicate marking metrics"
+      anchor: "samtools_markdup"
+      path_filters:
+        - "*_dedup*"
 
 custom_plot_config:
   general_stats_table:
@@ -59,3 +69,14 @@ custom_plot_config:
 export_plots: true
 
 disable_version_detection: true
+
+# MultiQC v1.35 ships a broken samtools/markdup_txt search pattern that checks for
+# the literal substring "^COMMAND:" instead of anchoring a regex, so real
+# `samtools markdup` output (which starts with "COMMAND:", no caret) never matches.
+sp:
+  samtools/markdup_txt:
+    contents:
+      - "COMMAND:"
+      - "samtools markdup"
+    num_lines: 2
+
