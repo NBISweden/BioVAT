@@ -24,7 +24,7 @@ nextflow_pipeline {
             def stable_path = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}', 'multiqc/multiqc_plots', 'multiqc/multiqc_plots/**'])
             // stable_content: All files in ${params.outdir}/ with stable content
             def stable_content = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
-            // bam_read_md5s: any BAM file in ${params.outdir} 
+            // bam_read_md5s: any BAM file in ${params.outdir}
             def outdir_path = file(params.outdir).toPath()
             def bam_read_md5s = getAllFilesFromDir(params.outdir)
                 .findAll { f -> f.toString().endsWith('.bam') }
