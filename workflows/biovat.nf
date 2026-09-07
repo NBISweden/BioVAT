@@ -13,6 +13,7 @@ include { READ_QC                } from '../subworkflows/local/read_qc/main'
 include { TRIM_READS             } from '../subworkflows/local/trim_reads/main'
 include { ALIGN_READS            } from '../subworkflows/local/align_reads/main'
 include { MERGE_LIBRARIES        } from '../subworkflows/local/merge_libraries/main'
+include { DEDUPLICATE            } from '../subworkflows/local/deduplicate/main'
 
 workflow BIOVAT {
 
@@ -22,6 +23,7 @@ workflow BIOVAT {
     enable                 // map: gating flags
     adapter_fasta          // channel: adapter fasta file read in from --adapter_fasta
     aligner                // string: Aligner to use for read alignment (e.g. bwa, parabricks)
+    duplicate_marker       // string: Duplicate marking tool to use (e.g. picard, samtools)
     multiqc_config
     multiqc_logo
     multiqc_methods_description
@@ -112,6 +114,21 @@ workflow BIOVAT {
         outputs_sample_qualimap      = MERGE_LIBRARIES.out.outputs_sample_qualimap
     }
 
+    // Deduplicate sample alignments
+    ch_deduplicated_alignments_indexed = channel.empty()
+    outputs_deduplicated_alignments    = channel.empty()
+    if ( enable.mark_duplicates ) {
+        DEDUPLICATE(
+            duplicate_marker,
+            ch_sample_alignments_indexed,
+            ch_reference_and_fai,
+            ch_multiqc_files
+        )
+        ch_deduplicated_alignments_indexed = DEDUPLICATE.out.ch_deduplicated_alignments_indexed
+        ch_multiqc_files                   = DEDUPLICATE.out.ch_multiqc_files
+        outputs_deduplicated_alignments    = ch_deduplicated_alignments_indexed
+    }
+
     // Collate and save software versions
     def topic_versions = channel.topic("versions")
         .distinct()
@@ -166,16 +183,17 @@ workflow BIOVAT {
         .mix(MULTIQC.out.plots)
 
     emit:
-    outputs_raw_read_qc        = outputs_raw_read_qc
-    outputs_trim_reads         = outputs_trim_reads
-    outputs_library_alignments = outputs_library_alignments
-    outputs_library_flagstat   = outputs_library_flagstat
-    outputs_library_riker      = outputs_library_riker
-    outputs_library_qualimap   = outputs_library_qualimap
-    outputs_sample_alignments  = outputs_sample_alignments
-    outputs_sample_flagstat    = outputs_sample_flagstat
-    outputs_sample_riker       = outputs_sample_riker
-    outputs_sample_qualimap    = outputs_sample_qualimap
-    outputs_multiqc            = outputs_multiqc
+    outputs_raw_read_qc             = outputs_raw_read_qc
+    outputs_trim_reads              = outputs_trim_reads
+    outputs_library_alignments      = outputs_library_alignments
+    outputs_library_flagstat        = outputs_library_flagstat
+    outputs_library_riker           = outputs_library_riker
+    outputs_library_qualimap        = outputs_library_qualimap
+    outputs_sample_alignments       = outputs_sample_alignments
+    outputs_sample_flagstat         = outputs_sample_flagstat
+    outputs_sample_riker            = outputs_sample_riker
+    outputs_sample_qualimap         = outputs_sample_qualimap
+    outputs_deduplicated_alignments = outputs_deduplicated_alignments
+    outputs_multiqc                 = outputs_multiqc
 
 }
