@@ -15,6 +15,8 @@ results/
 │   └── qc
 ├── 04_merged_samples
 │   └── qc
+├── 05_deduplicated_samples
+│   └── qc
 ├── multiqc
 │   ├── multiqc_data
 │   └── multiqc_plots
@@ -29,7 +31,8 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [Read trimming](#read-trimming) - Adapter and quality trimming of raw reads
 - [Alignment](#alignment) - Alignment of raw or trimmed reads
 - [Alignment quality checks](#Alignment-qc) - BAM/CRAM alignment QC
-- [Merging] - Alignment files are merged at the sample level
+- [Merging](#merging) - Alignment files are merged at the sample level
+- [Deduplication](#deduplication) - Duplicates are marked or removed from alignments
 - [MultiQC](#multiqc) - Aggregate report describing results and QC from the whole pipeline
 - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
 
@@ -103,11 +106,29 @@ Alignment QC executes at several workflow stages. The outputs will be in the dir
 
 ### Merging
 
+<details markdown="1">
+<summary>Output files</summary>
+
 - `04_merged_samples/`
   - `*.bam`: Merged alignment files at the sample level.
   - `*.bam.csi`: Index file.
 
 Running with `--enable_cram_format` will produce `.cram` and `.crai` files instead.
+
+</details>
+
+### Deduplication
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `05_deduplicated_samples/`
+  - `*._dedup.bam`: Deduplicated alignment files.
+  - `*._dedup.bam.csi`: Index file.
+
+Running with `--enable_cram_format` will produce `.cram` and `.crai` files instead.
+
+</details>
 
 ### MultiQC
 

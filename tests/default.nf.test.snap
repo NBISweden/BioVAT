@@ -24,6 +24,9 @@
                 "SAMTOOLS_FLAGSTAT": {
                     "samtools": 1.24
                 },
+                "SAMTOOLS_SORMADUP": {
+                    "samtools": 1.24
+                },
                 "Workflow": {
                     "NBISweden/biovat": "v0.0.1dev"
                 }
@@ -88,6 +91,9 @@
                 "04_merged_samples/qc/riker/sample_S03.wgs-metrics.txt",
                 "04_merged_samples/qc/samtools_flagstat",
                 "04_merged_samples/qc/samtools_flagstat/sample_S03.flagstat",
+                "05_deduplicated_samples",
+                "05_deduplicated_samples/S03_dedup.bam",
+                "05_deduplicated_samples/S03_dedup.bam.csi",
                 "multiqc",
                 "multiqc/multiqc_data",
                 "multiqc/multiqc_data/fastp-insert-size-plot.txt",
@@ -281,10 +287,11 @@
             ],
             [
                 "03_read_alignment/S03.1.BH252YCCXY.7.bam:b5aa2fc8b9ebf4e5322219b24d613ea4",
-                "04_merged_samples/S03.bam:b5aa2fc8b9ebf4e5322219b24d613ea4"
+                "04_merged_samples/S03.bam:b5aa2fc8b9ebf4e5322219b24d613ea4",
+                "05_deduplicated_samples/S03_dedup.bam:dca60f949781c16515581f2a02540e23"
             ]
         ],
-        "timestamp": "2026-09-04T15:51:00.621364253",
+        "timestamp": "2026-09-07T15:07:21.819182285",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"
