@@ -32,7 +32,6 @@ params {
 
     // Alignment options
     aligner                     : String
-    enable_sort_alignments      : Boolean
     enable_cram_format          : Boolean
 
     // BAM QC options
@@ -175,7 +174,7 @@ output {
     // MERGE_LIBRARIES
     outputs_sample_alignments {
         path { meta, alignment, index ->
-            // Dynamic naming such that singletons are also renamed by sample ID
+            // Singletons will also be renamed by sample ID
             alignment >> "04_merged_samples/${meta.id}.${alignment.extension}"
             index     >> "04_merged_samples/${meta.id}.${alignment.extension}.${index.extension}"
         }

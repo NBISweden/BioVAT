@@ -24,7 +24,7 @@ workflow ALIGN_READS {
             reads,
             BWAMEM3_INDEX.out.index,
             reference,
-            enable.sort_alignments
+            true // Enforce sorting of BAM/CRAM
         )
         ch_library_alignments_indexed = BWAMEM3_MEM.out.aligned.join(BWAMEM3_MEM.out.index)
     } else if ( aligner == 'parabricks' ) {

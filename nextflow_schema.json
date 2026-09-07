@@ -95,11 +95,6 @@
                     "enum": ["bwa-mem3", "parabricks"],
                     "description": "Alignment tool choice."
                 },
-                "enable_sort_alignments": {
-                    "type": "boolean",
-                    "description": "Sort the BAM/CRAM output from BWA or Parabricks.",
-                    "default": true
-                },
                 "enable_cram_format": {
                     "type": "boolean",
                     "description": "Output alignments in CRAM format instead of BAM."
