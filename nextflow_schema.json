@@ -131,7 +131,7 @@
             "properties": {
                 "duplicate_marker": {
                     "type": "string",
-                    "default": "picard",
+                    "default": "samtools",
                     "description": "Duplicate marking tool choice.",
                     "enum": ["picard", "samtools"]
                 },
