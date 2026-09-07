@@ -60,6 +60,11 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Merge alignments at the sample level."
+                },
+                "enable_mark_duplicates": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Run the duplicate marking subworkflow."
                 }
             }
         },
@@ -115,6 +120,24 @@
                 "enable_qualimap": {
                     "type": "boolean",
                     "description": "Run Qualimap during the alignment QC subworkflow. Not compatible with '--enable_cram_format'."
+                }
+            }
+        },
+        "duplicate_marking_options": {
+            "title": "Duplicate marking options",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "duplicate_marker": {
+                    "type": "string",
+                    "default": "picard",
+                    "description": "Duplicate marking tool choice.",
+                    "enum": ["picard", "samtools"]
+                },
+                "enable_remove_duplicates": {
+                    "type": "boolean",
+                    "description": "Remove alignments identified as duplicates (else mark them)."
                 }
             }
         },
@@ -278,6 +301,9 @@
         },
         {
             "$ref": "#/$defs/alignment_qc_options"
+        },
+        {
+            "$ref": "#/$defs/duplicate_marking_options"
         },
         {
             "$ref": "#/$defs/institutional_config_options"

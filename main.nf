@@ -24,6 +24,7 @@ params {
     enable_align                : Boolean
     enable_align_qc             : Boolean
     enable_merge                : Boolean
+    enable_mark_duplicates      : Boolean
 
     // Read trimming options
     adapter_fasta               : String
@@ -34,9 +35,13 @@ params {
     aligner                     : String
     enable_cram_format          : Boolean
 
-    // BAM QC options
+    // Alignment QC options
     enable_riker                : Boolean
     enable_qualimap             : Boolean
+
+    // Duplicate marking options
+    duplicate_marker            : String
+    enable_remove_duplicates    : Boolean
 
     // MultiQC options
     multiqc_config              : String
@@ -88,6 +93,7 @@ workflow NBISWEDEN_BIOVAT {
         enable,
         params.adapter_fasta,
         params.aligner,
+        params.duplicate_marker,
         params.multiqc_config,
         params.multiqc_logo,
         params.multiqc_methods_description,
