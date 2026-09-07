@@ -93,6 +93,7 @@ workflow BIOVAT {
 
     // Merge sample alignments
     ch_sample_alignments_indexed = channel.empty()
+    outputs_sample_alignments    = channel.empty()
     outputs_sample_flagstat      = channel.empty()
     outputs_sample_riker         = channel.empty()
     outputs_sample_qualimap      = channel.empty()

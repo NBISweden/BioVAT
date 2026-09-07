@@ -154,22 +154,42 @@ workflow PIPELINE_COMPLETION {
 //
 // Custom validation of input parameters (e.g. dependent/exclusive params)
 //
+
 def validationError(message) {
     error "\033[0;91mERROR\033[0m: ${message}"
 }
 
 def validateInputParameters() {
 
+    def enable = params.findAll { k, v -> k.startsWith('enable_') }
+        .collectEntries { k, v -> [(k - 'enable_'): v] }
+
     // If align is requested, a reference must be provided
-    if ( params.enable_align && !params.reference ) {
+    if ( enable.align && !params.reference ) {
         validationError("Alignment cannot be run without a reference FASTA file.")
     }
-
-    // If CRAM format is request, qualimap cannot be run
-    if ( params.enable_cram_format && params.enable_align_qc && params.enable_qualimap ) {
+    // If CRAM format is requested, qualimap cannot be run
+    if ( enable.cram_format && enable.align_qc && enable.qualimap ) {
         validationError("Qualimap cannot be run when CRAM format is enabled.")
     }
 
+    // Stage dependency map
+    def stage_dependencies = [
+        'raw_read_qc': [],
+        'trim': [],
+        'align': [],
+        'merge': ['align'], // TODO: should also support sorted BAM/CRAM input
+        'deduplicate': ['merge'],
+    ]
+    stage_dependencies.each { step, dependencies ->
+        if (enable[step]) {
+            dependencies.each { dependency ->
+                if (!enable[dependency]) {
+                    validationError("The '${step}' stage requires the '${dependency}' stage to be enabled.")
+                }
+            }
+        }
+    }
 }
 
 // Validate channels from input samplesheet
