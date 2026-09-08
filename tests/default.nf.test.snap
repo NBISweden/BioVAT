@@ -218,7 +218,6 @@
                 "sample_S03.wgs-coverage.txt:md5,4c74e6ec23f45dcf41853cf32ba87bf1",
                 "sample_S03.wgs-metrics.txt:md5,d6c13ce5657ef0cc93d7e81d1d0005db",
                 "sample_S03.flagstat:md5,b36af106cbf08791bcba8194edd2ae48",
-                "S03_dedup.metrics.txt:md5,43ea58221e02280008c70646867fc514",
                 "fastp-insert-size-plot.txt:md5,e88389a65806fb66b42955888fc31669",
                 "fastp-seq-content-gc-plot_Read_1_After_filtering.txt:md5,ae6a655d1bd6d7b6a8c85337e25d84a6",
                 "fastp-seq-content-gc-plot_Read_1_Before_filtering.txt:md5,ab7be6e9987a789c4274ea057864d33c",
@@ -308,7 +307,7 @@
                 "05_deduplicated_samples/S03_dedup.bam:b5aa2fc8b9ebf4e5322219b24d613ea4"
             ]
         ],
-        "timestamp": "2026-09-07T15:41:26.597100868",
+        "timestamp": "2026-09-08T08:52:22.794828992",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"
