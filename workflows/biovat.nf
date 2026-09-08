@@ -36,9 +36,7 @@ workflow BIOVAT {
 
     // Reference utilities
     ch_reference_and_fai = channel.empty()
-    // TODO: temporarily enabled if a reference is provided...
-    // This should be replaced with better logic to handle cases where it is not required
-    if ( params.reference ) {
+    if ( params.reference && (enable.align || enable.merge || enable.align_qc) ) {
         REFERENCE_UTILS(
             reference
         )

@@ -30,7 +30,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [Raw read quality checks](#raw-read-qc) - Raw read QC
 - [Read trimming](#read-trimming) - Adapter and quality trimming of raw reads
 - [Alignment](#alignment) - Alignment of raw or trimmed reads
-- [Alignment quality checks](#Alignment-qc) - BAM/CRAM alignment QC
+- [Alignment quality checks](#alignment-qc) - BAM/CRAM alignment QC
 - [Merging](#merging) - Alignment files are merged at the sample level
 - [Deduplication](#deduplication) - Duplicates are marked or removed from alignments
 - [MultiQC](#multiqc) - Aggregate report describing results and QC from the whole pipeline

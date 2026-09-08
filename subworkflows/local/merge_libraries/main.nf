@@ -11,7 +11,7 @@ workflow MERGE_LIBRARIES {
 
     main:
     // Aligments: group on sample, branch to enable merge skipping (singleton libraries)
-    ch_sample_groups = ch_library_alignments_indexed
+    ch_alignments = ch_library_alignments_indexed
         .map { meta, alignment, index ->
             def sample_meta = [
                 id: meta.id,
@@ -23,25 +23,25 @@ workflow MERGE_LIBRARIES {
         .branch { meta, alignments, indexes ->
             skip_merge: alignments.size() == 1
                 return [ meta, alignments[0], indexes[0] ]
-            run_merge : alignments.size() > 1
+            for_merge : alignments.size() > 1
         }
 
     // Reference: shape the input channel based on alignment format
-    ch_samtools_reference = enable.cram_format
+    ch_reference_for_merge = enable.cram_format
         ? ch_reference_and_fai.map { meta, fasta, fai -> [ meta, fasta, fai, [] ] }
         : [ [], [], [], [] ] // else BAM
 
     // Merge alignments
     SAMTOOLS_MERGE(
-        ch_sample_groups.run_merge,
-        ch_samtools_reference
+        ch_alignments.for_merge,
+        ch_reference_for_merge
     )
 
     // Join merged alignments with their indexes, then re-mix with singletons
     ch_sample_alignments_indexed = SAMTOOLS_MERGE.out.cram
         .mix(SAMTOOLS_MERGE.out.bam)
         .join(SAMTOOLS_MERGE.out.index)
-        .mix(ch_sample_groups.skip_merge)
+        .mix(ch_alignments.skip_merge)
 
     // MERGE_LIBRARIES:ALIGNMENT_QC
     outputs_sample_flagstat = channel.empty()
@@ -51,7 +51,8 @@ workflow MERGE_LIBRARIES {
         ALIGNMENT_QC(
             ch_sample_alignments_indexed,
             ch_reference_and_fai,
-            enable
+            enable,
+            'sample'
         )
         ch_multiqc_files = ch_multiqc_files
             .mix(

@@ -43,7 +43,6 @@ enable_align_qc: true # Boolean: run quality checks on alignment files (BAM/CRAM
 ## =============================================================================
 
 # aligner: "parabricks" # Default: bwa-mem3
-# enable_sort_alignments: false # Boolean: sort the BAM output from BWA-mem3/parabricks. Default: true
 # enable_cram_format: true # Boolean: output alignments in CRAM format instead of BAM. Default: false
 
 ## =============================================================================

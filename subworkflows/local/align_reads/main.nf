@@ -50,7 +50,8 @@ workflow ALIGN_READS {
         ALIGNMENT_QC(
             ch_library_alignments_indexed,
             ch_reference_and_fai,
-            enable
+            enable,
+            'library'
         )
         ch_multiqc_files = ch_multiqc_files
             .mix(
