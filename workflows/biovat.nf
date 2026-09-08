@@ -115,17 +115,24 @@ workflow BIOVAT {
     // Deduplicate sample alignments
     ch_deduplicated_alignments_indexed = channel.empty()
     outputs_deduplication              = channel.empty()
+    outputs_deduplicated_flagstat      = channel.empty()
+    outputs_deduplicated_riker         = channel.empty()
+    outputs_deduplicated_qualimap      = channel.empty()
     if ( enable.mark_duplicates ) {
         DEDUPLICATE(
             duplicate_marker,
             ch_sample_alignments_indexed,
             ch_reference_and_fai,
-            ch_multiqc_files
+            ch_multiqc_files,
+            enable
         )
         ch_deduplicated_alignments_indexed = DEDUPLICATE.out.ch_deduplicated_alignments_indexed
         ch_multiqc_files                   = DEDUPLICATE.out.ch_multiqc_files
         outputs_deduplication              = ch_deduplicated_alignments_indexed
             .mix(DEDUPLICATE.out.ch_deduplication_metrics)
+        outputs_deduplicated_flagstat      = DEDUPLICATE.out.outputs_deduplicated_flagstat
+        outputs_deduplicated_riker         = DEDUPLICATE.out.outputs_deduplicated_riker
+        outputs_deduplicated_qualimap      = DEDUPLICATE.out.outputs_deduplicated_qualimap
     }
 
     // Collate and save software versions
@@ -182,17 +189,20 @@ workflow BIOVAT {
         .mix(MULTIQC.out.plots)
 
     emit:
-    outputs_raw_read_qc        = outputs_raw_read_qc
-    outputs_trim_reads         = outputs_trim_reads
-    outputs_library_alignments = outputs_library_alignments
-    outputs_library_flagstat   = outputs_library_flagstat
-    outputs_library_riker      = outputs_library_riker
-    outputs_library_qualimap   = outputs_library_qualimap
-    outputs_sample_alignments  = outputs_sample_alignments
-    outputs_sample_flagstat    = outputs_sample_flagstat
-    outputs_sample_riker       = outputs_sample_riker
-    outputs_sample_qualimap    = outputs_sample_qualimap
-    outputs_deduplication      = outputs_deduplication
-    outputs_multiqc            = outputs_multiqc
+    outputs_raw_read_qc           = outputs_raw_read_qc
+    outputs_trim_reads            = outputs_trim_reads
+    outputs_library_alignments    = outputs_library_alignments
+    outputs_library_flagstat      = outputs_library_flagstat
+    outputs_library_riker         = outputs_library_riker
+    outputs_library_qualimap      = outputs_library_qualimap
+    outputs_sample_alignments     = outputs_sample_alignments
+    outputs_sample_flagstat       = outputs_sample_flagstat
+    outputs_sample_riker          = outputs_sample_riker
+    outputs_sample_qualimap       = outputs_sample_qualimap
+    outputs_deduplication         = outputs_deduplication
+    outputs_deduplicated_flagstat = outputs_deduplicated_flagstat
+    outputs_deduplicated_riker    = outputs_deduplicated_riker
+    outputs_deduplicated_qualimap = outputs_deduplicated_qualimap
+    outputs_multiqc               = outputs_multiqc
 
 }

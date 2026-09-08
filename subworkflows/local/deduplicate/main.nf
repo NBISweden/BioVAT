@@ -10,6 +10,7 @@ workflow DEDUPLICATE {
     ch_sample_alignments_indexed
     ch_reference_and_fai
     ch_multiqc_files
+    enable
 
     main:
     if ( duplicate_marker == 'picard' ) {
@@ -40,9 +41,34 @@ workflow DEDUPLICATE {
             .mix(SAMTOOLS_SORMADUP.out.metrics.map { _meta, file -> file })
     }
 
+    // DEDUPLICATE:ALIGNMENT_QC
+    outputs_deduplicated_flagstat = channel.empty()
+    outputs_deduplicated_riker    = channel.empty()
+    outputs_deduplicated_qualimap = channel.empty()
+    if ( enable.align_qc ) {
+        ALIGNMENT_QC(
+            ch_sample_alignments_indexed,
+            ch_reference_and_fai,
+            enable,
+            'deduplicated'
+        )
+        ch_multiqc_files = ch_multiqc_files
+            .mix(
+                ALIGNMENT_QC.out.flagstat_outputs.map{ _meta, file -> file },
+                ALIGNMENT_QC.out.riker_outputs.map{ _meta, file -> file },
+                ALIGNMENT_QC.out.qualimap_outputs.map{ _meta, file -> file }
+            )
+        outputs_deduplicated_flagstat = ALIGNMENT_QC.out.flagstat_outputs
+        outputs_deduplicated_riker    = ALIGNMENT_QC.out.riker_outputs
+        outputs_deduplicated_qualimap = ALIGNMENT_QC.out.qualimap_outputs
+    }
+
     emit:
     ch_deduplicated_alignments_indexed
     ch_deduplication_metrics
     ch_multiqc_files
+    outputs_deduplicated_flagstat
+    outputs_deduplicated_riker
+    outputs_deduplicated_qualimap
 
 }
