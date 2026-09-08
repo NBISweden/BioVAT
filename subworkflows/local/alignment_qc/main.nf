@@ -8,15 +8,23 @@ workflow ALIGNMENT_QC {
     ch_alignment_and_index   // channel: aligned reads and their indices to perform QC on
     ch_reference_and_fai     // channel: reference fasta and fai index
     enable                   // map: stage/tool gating flags
+    level                    // string: QC level, used as the output prefix ('library'/'sample')
 
     main:
+    // Tag each record with a level-scoped prefix so a single modules.config selector covers every call site
+    ch_qc_input = ch_alignment_and_index
+        .map { meta, alignment, index ->
+            def id = level == 'library' ? meta.read_group : meta.id
+            [ meta + [ qc_prefix: "${level}_${id}" ], alignment, index ]
+        }
+
     // SAMTOOLS_FLAGSTAT
-    SAMTOOLS_FLAGSTAT(ch_alignment_and_index)
+    SAMTOOLS_FLAGSTAT(ch_qc_input)
 
     // RIKER
     riker_outputs = channel.empty()
     if ( enable.riker ) {
-        def ch_riker_input = ch_alignment_and_index // TODO: Potentially support optional inputs, except RNA-seq specific.
+        def ch_riker_input = ch_qc_input // TODO: Potentially support optional inputs, except RNA-seq specific.
             .map { meta, alignment, index ->
                 [
                     meta, alignment, index,
@@ -43,7 +51,7 @@ workflow ALIGNMENT_QC {
     qualimap_outputs = channel.empty()
     if ( enable.qualimap ) {
         QUALIMAP_BAMQC(
-            ch_alignment_and_index.map { meta, alignment, _index -> [ meta, alignment ] },
+            ch_qc_input.map { meta, alignment, _index -> [ meta, alignment ] },
             []         //  TODO: Potentially support optional input (gff file)
         )
         qualimap_outputs = QUALIMAP_BAMQC.out.results
