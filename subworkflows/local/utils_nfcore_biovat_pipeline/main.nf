@@ -179,7 +179,7 @@ def validateInputParameters() {
         'trim': [],
         'align': [],
         'merge': ['align'], // TODO: should also support sorted BAM/CRAM input
-        'deduplicate': ['merge'],
+        'mark_duplicates': ['merge'],
     ]
     stage_dependencies.each { step, dependencies ->
         if (enable[step]) {
