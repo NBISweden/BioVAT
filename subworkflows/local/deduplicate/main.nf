@@ -47,7 +47,7 @@ workflow DEDUPLICATE {
     outputs_deduplicated_qualimap = channel.empty()
     if ( enable.align_qc ) {
         ALIGNMENT_QC(
-            ch_sample_alignments_indexed,
+            ch_deduplicated_alignments_indexed,
             ch_reference_and_fai,
             enable,
             'markdup'
