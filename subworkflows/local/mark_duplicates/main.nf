@@ -3,7 +3,7 @@ include { SAMTOOLS_SORMADUP     } from '../../../modules/nf-core/samtools/sormad
 include { SAMTOOLS_INDEX        } from '../../../modules/nf-core/samtools/index/main'
 include { ALIGNMENT_QC          } from '../alignment_qc/main'
 
-workflow DEDUPLICATE {
+workflow MARK_DUPLICATES {
 
     take:
     duplicate_marker
@@ -18,13 +18,13 @@ workflow DEDUPLICATE {
             ch_sample_alignments_indexed.map { meta, alignment, _index -> [ meta, alignment ] },
             ch_reference_and_fai
         )
-        ch_deduplicated_alignments = PICARD_MARKDUPLICATES.out.bam.mix(PICARD_MARKDUPLICATES.out.cram)
+        ch_from_markdups_alignments = PICARD_MARKDUPLICATES.out.bam.mix(PICARD_MARKDUPLICATES.out.cram)
         SAMTOOLS_INDEX(
-            ch_deduplicated_alignments
+            ch_from_markdups_alignments
         )
-        ch_deduplicated_alignments_indexed = ch_deduplicated_alignments
+        ch_from_markdups_alignments_indexed = ch_from_markdups_alignments
             .join(SAMTOOLS_INDEX.out.index)
-        ch_deduplication_metrics           = PICARD_MARKDUPLICATES.out.metrics
+        ch_from_markdups_metrics            = PICARD_MARKDUPLICATES.out.metrics
         ch_multiqc_files = ch_multiqc_files
             .mix(PICARD_MARKDUPLICATES.out.metrics.map { _meta, file -> file })
     } else if ( duplicate_marker == 'samtools' ) {
@@ -32,21 +32,21 @@ workflow DEDUPLICATE {
             ch_sample_alignments_indexed.map { meta, alignment, _index -> [ meta, alignment ] },
             ch_reference_and_fai
         )
-        ch_bam  = SAMTOOLS_SORMADUP.out.bam.join(SAMTOOLS_SORMADUP.out.csi)
-        ch_cram = SAMTOOLS_SORMADUP.out.cram.join(SAMTOOLS_SORMADUP.out.crai)
-        ch_deduplicated_alignments_indexed = ch_bam.mix(ch_cram)
-        ch_deduplication_metrics           = SAMTOOLS_SORMADUP.out.metrics
+        ch_from_markdups_bam_indexed  = SAMTOOLS_SORMADUP.out.bam.join(SAMTOOLS_SORMADUP.out.csi)
+        ch_from_markdups_cram_indexed = SAMTOOLS_SORMADUP.out.cram.join(SAMTOOLS_SORMADUP.out.crai)
+        ch_from_markdups_alignments_indexed = ch_from_markdups_bam_indexed.mix(ch_from_markdups_cram_indexed)
+        ch_from_markdups_metrics            = SAMTOOLS_SORMADUP.out.metrics
         ch_multiqc_files = ch_multiqc_files
             .mix(SAMTOOLS_SORMADUP.out.metrics.map { _meta, file -> file })
     }
 
-    // DEDUPLICATE:ALIGNMENT_QC
-    outputs_deduplicated_flagstat = channel.empty()
-    outputs_deduplicated_riker    = channel.empty()
-    outputs_deduplicated_qualimap = channel.empty()
+    // MARK_DUPLICATES:ALIGNMENT_QC
+    outputs_mark_duplicates_flagstat = channel.empty()
+    outputs_mark_duplicates_riker    = channel.empty()
+    outputs_mark_duplicates_qualimap = channel.empty()
     if ( enable.align_qc ) {
         ALIGNMENT_QC(
-            ch_deduplicated_alignments_indexed,
+            ch_from_markdups_alignments_indexed,
             ch_reference_and_fai,
             enable,
             'markdup'
@@ -57,17 +57,17 @@ workflow DEDUPLICATE {
                 ALIGNMENT_QC.out.riker_outputs.map{ _meta, file -> file },
                 ALIGNMENT_QC.out.qualimap_outputs.map{ _meta, file -> file }
             )
-        outputs_deduplicated_flagstat = ALIGNMENT_QC.out.flagstat_outputs
-        outputs_deduplicated_riker    = ALIGNMENT_QC.out.riker_outputs
-        outputs_deduplicated_qualimap = ALIGNMENT_QC.out.qualimap_outputs
+        outputs_mark_duplicates_flagstat = ALIGNMENT_QC.out.flagstat_outputs
+        outputs_mark_duplicates_riker    = ALIGNMENT_QC.out.riker_outputs
+        outputs_mark_duplicates_qualimap = ALIGNMENT_QC.out.qualimap_outputs
     }
 
     emit:
-    ch_deduplicated_alignments_indexed
-    ch_deduplication_metrics
+    ch_from_markdups_alignments_indexed
+    ch_from_markdups_metrics
     ch_multiqc_files
-    outputs_deduplicated_flagstat
-    outputs_deduplicated_riker
-    outputs_deduplicated_qualimap
+    outputs_mark_duplicates_flagstat
+    outputs_mark_duplicates_riker
+    outputs_mark_duplicates_qualimap
 
 }

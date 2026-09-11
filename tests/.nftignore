@@ -13,5 +13,5 @@ pipeline_info/*.{html,json,txt,yml}
 02_read_trimming/*.fastp.{html,log}
 03_read_alignment/*.{bam,bam.csi}
 04_merged_samples/*.{bam,bam.csi}
-05_deduplicated_samples/*.{bam,bam.csi,metrics.txt}
+05_duplicate_processed/*.{bam,bam.csi,metrics.txt}
 **/qc/riker/*.{pdf}

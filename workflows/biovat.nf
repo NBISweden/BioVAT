@@ -13,7 +13,7 @@ include { READ_QC                } from '../subworkflows/local/read_qc/main'
 include { TRIM_READS             } from '../subworkflows/local/trim_reads/main'
 include { ALIGN_READS            } from '../subworkflows/local/align_reads/main'
 include { MERGE_LIBRARIES        } from '../subworkflows/local/merge_libraries/main'
-include { DEDUPLICATE            } from '../subworkflows/local/deduplicate/main'
+include { MARK_DUPLICATES        } from '../subworkflows/local/mark_duplicates/main'
 
 workflow BIOVAT {
 
@@ -113,26 +113,26 @@ workflow BIOVAT {
     }
 
     // Deduplicate sample alignments
-    ch_deduplicated_alignments_indexed = channel.empty()
-    outputs_deduplication              = channel.empty()
-    outputs_deduplicated_flagstat      = channel.empty()
-    outputs_deduplicated_riker         = channel.empty()
-    outputs_deduplicated_qualimap      = channel.empty()
+    ch_from_markdups_alignments_indexed = channel.empty()
+    outputs_mark_duplicates             = channel.empty()
+    outputs_mark_duplicates_flagstat    = channel.empty()
+    outputs_mark_duplicates_riker       = channel.empty()
+    outputs_mark_duplicates_qualimap    = channel.empty()
     if ( enable.mark_duplicates ) {
-        DEDUPLICATE(
+        MARK_DUPLICATES(
             duplicate_marker,
             ch_sample_alignments_indexed,
             ch_reference_and_fai,
             ch_multiqc_files,
             enable
         )
-        ch_deduplicated_alignments_indexed = DEDUPLICATE.out.ch_deduplicated_alignments_indexed
-        ch_multiqc_files                   = DEDUPLICATE.out.ch_multiqc_files
-        outputs_deduplication              = ch_deduplicated_alignments_indexed
-            .mix(DEDUPLICATE.out.ch_deduplication_metrics)
-        outputs_deduplicated_flagstat      = DEDUPLICATE.out.outputs_deduplicated_flagstat
-        outputs_deduplicated_riker         = DEDUPLICATE.out.outputs_deduplicated_riker
-        outputs_deduplicated_qualimap      = DEDUPLICATE.out.outputs_deduplicated_qualimap
+        ch_from_markdups_alignments_indexed = MARK_DUPLICATES.out.ch_from_markdups_alignments_indexed
+        ch_multiqc_files                    = MARK_DUPLICATES.out.ch_multiqc_files
+        outputs_mark_duplicates             = ch_from_markdups_alignments_indexed
+            .mix(MARK_DUPLICATES.out.ch_from_markdups_metrics)
+        outputs_mark_duplicates_flagstat    = MARK_DUPLICATES.out.outputs_mark_duplicates_flagstat
+        outputs_mark_duplicates_riker       = MARK_DUPLICATES.out.outputs_mark_duplicates_riker
+        outputs_mark_duplicates_qualimap    = MARK_DUPLICATES.out.outputs_mark_duplicates_qualimap
     }
 
     // Collate and save software versions
@@ -189,20 +189,20 @@ workflow BIOVAT {
         .mix(MULTIQC.out.plots)
 
     emit:
-    outputs_raw_read_qc           = outputs_raw_read_qc
-    outputs_trim_reads            = outputs_trim_reads
-    outputs_library_alignments    = outputs_library_alignments
-    outputs_library_flagstat      = outputs_library_flagstat
-    outputs_library_riker         = outputs_library_riker
-    outputs_library_qualimap      = outputs_library_qualimap
-    outputs_sample_alignments     = outputs_sample_alignments
-    outputs_sample_flagstat       = outputs_sample_flagstat
-    outputs_sample_riker          = outputs_sample_riker
-    outputs_sample_qualimap       = outputs_sample_qualimap
-    outputs_deduplication         = outputs_deduplication
-    outputs_deduplicated_flagstat = outputs_deduplicated_flagstat
-    outputs_deduplicated_riker    = outputs_deduplicated_riker
-    outputs_deduplicated_qualimap = outputs_deduplicated_qualimap
-    outputs_multiqc               = outputs_multiqc
+    outputs_raw_read_qc              = outputs_raw_read_qc
+    outputs_trim_reads               = outputs_trim_reads
+    outputs_library_alignments       = outputs_library_alignments
+    outputs_library_flagstat         = outputs_library_flagstat
+    outputs_library_riker            = outputs_library_riker
+    outputs_library_qualimap         = outputs_library_qualimap
+    outputs_sample_alignments        = outputs_sample_alignments
+    outputs_sample_flagstat          = outputs_sample_flagstat
+    outputs_sample_riker             = outputs_sample_riker
+    outputs_sample_qualimap          = outputs_sample_qualimap
+    outputs_mark_duplicates          = outputs_mark_duplicates
+    outputs_mark_duplicates_flagstat = outputs_mark_duplicates_flagstat
+    outputs_mark_duplicates_riker    = outputs_mark_duplicates_riker
+    outputs_mark_duplicates_qualimap = outputs_mark_duplicates_qualimap
+    outputs_multiqc                  = outputs_multiqc
 
 }

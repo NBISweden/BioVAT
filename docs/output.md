@@ -15,7 +15,7 @@ results/
 │   └── qc
 ├── 04_merged_samples
 │   └── qc
-├── 05_deduplicated_samples
+├── 05_duplicate_processed
 │   └── qc
 ├── multiqc
 │   ├── multiqc_data
@@ -122,7 +122,7 @@ Running with `--enable_cram_format` will produce `.cram` and `.crai` files inste
 <details markdown="1">
 <summary>Output files</summary>
 
-- `05_deduplicated_samples/`
+- `05_duplicate_processed/`
   - `*_markdup.bam`: Alignment files with duplicates marked (or removed, if `--enable_remove_duplicates` is set).
   - `*_markdup.bam.csi`: Index file.
   - `*_markdup.metrics.txt`: Duplicate marking metrics.

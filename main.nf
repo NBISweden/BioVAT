@@ -101,21 +101,21 @@ workflow NBISWEDEN_BIOVAT {
     )
 
     emit:
-    outputs_raw_read_qc           = BIOVAT.out.outputs_raw_read_qc
-    outputs_trim_reads            = BIOVAT.out.outputs_trim_reads
-    outputs_library_alignments    = BIOVAT.out.outputs_library_alignments
-    outputs_library_flagstat      = BIOVAT.out.outputs_library_flagstat
-    outputs_library_riker         = BIOVAT.out.outputs_library_riker
-    outputs_library_qualimap      = BIOVAT.out.outputs_library_qualimap
-    outputs_sample_alignments     = BIOVAT.out.outputs_sample_alignments
-    outputs_sample_flagstat       = BIOVAT.out.outputs_sample_flagstat
-    outputs_sample_riker          = BIOVAT.out.outputs_sample_riker
-    outputs_sample_qualimap       = BIOVAT.out.outputs_sample_qualimap
-    outputs_deduplication         = BIOVAT.out.outputs_deduplication
-    outputs_deduplicated_flagstat = BIOVAT.out.outputs_deduplicated_flagstat
-    outputs_deduplicated_riker    = BIOVAT.out.outputs_deduplicated_riker
-    outputs_deduplicated_qualimap = BIOVAT.out.outputs_deduplicated_qualimap
-    outputs_multiqc               = BIOVAT.out.outputs_multiqc
+    outputs_raw_read_qc              = BIOVAT.out.outputs_raw_read_qc
+    outputs_trim_reads               = BIOVAT.out.outputs_trim_reads
+    outputs_library_alignments       = BIOVAT.out.outputs_library_alignments
+    outputs_library_flagstat         = BIOVAT.out.outputs_library_flagstat
+    outputs_library_riker            = BIOVAT.out.outputs_library_riker
+    outputs_library_qualimap         = BIOVAT.out.outputs_library_qualimap
+    outputs_sample_alignments        = BIOVAT.out.outputs_sample_alignments
+    outputs_sample_flagstat          = BIOVAT.out.outputs_sample_flagstat
+    outputs_sample_riker             = BIOVAT.out.outputs_sample_riker
+    outputs_sample_qualimap          = BIOVAT.out.outputs_sample_qualimap
+    outputs_mark_duplicates          = BIOVAT.out.outputs_mark_duplicates
+    outputs_mark_duplicates_flagstat = BIOVAT.out.outputs_mark_duplicates_flagstat
+    outputs_mark_duplicates_riker    = BIOVAT.out.outputs_mark_duplicates_riker
+    outputs_mark_duplicates_qualimap = BIOVAT.out.outputs_mark_duplicates_qualimap
+    outputs_multiqc                  = BIOVAT.out.outputs_multiqc
 
 }
 
@@ -143,21 +143,21 @@ workflow {
     )
 
     publish:
-    outputs_raw_read_qc           = NBISWEDEN_BIOVAT.out.outputs_raw_read_qc
-    outputs_trim_reads            = NBISWEDEN_BIOVAT.out.outputs_trim_reads
-    outputs_library_alignments    = NBISWEDEN_BIOVAT.out.outputs_library_alignments
-    outputs_library_flagstat      = NBISWEDEN_BIOVAT.out.outputs_library_flagstat
-    outputs_library_riker         = NBISWEDEN_BIOVAT.out.outputs_library_riker
-    outputs_library_qualimap      = NBISWEDEN_BIOVAT.out.outputs_library_qualimap
-    outputs_sample_alignments     = NBISWEDEN_BIOVAT.out.outputs_sample_alignments
-    outputs_sample_flagstat       = NBISWEDEN_BIOVAT.out.outputs_sample_flagstat
-    outputs_sample_riker          = NBISWEDEN_BIOVAT.out.outputs_sample_riker
-    outputs_sample_qualimap       = NBISWEDEN_BIOVAT.out.outputs_sample_qualimap
-    outputs_deduplication         = NBISWEDEN_BIOVAT.out.outputs_deduplication
-    outputs_deduplicated_flagstat = NBISWEDEN_BIOVAT.out.outputs_deduplicated_flagstat
-    outputs_deduplicated_riker    = NBISWEDEN_BIOVAT.out.outputs_deduplicated_riker
-    outputs_deduplicated_qualimap = NBISWEDEN_BIOVAT.out.outputs_deduplicated_qualimap
-    outputs_multiqc               = NBISWEDEN_BIOVAT.out.outputs_multiqc
+    outputs_raw_read_qc              = NBISWEDEN_BIOVAT.out.outputs_raw_read_qc
+    outputs_trim_reads               = NBISWEDEN_BIOVAT.out.outputs_trim_reads
+    outputs_library_alignments       = NBISWEDEN_BIOVAT.out.outputs_library_alignments
+    outputs_library_flagstat         = NBISWEDEN_BIOVAT.out.outputs_library_flagstat
+    outputs_library_riker            = NBISWEDEN_BIOVAT.out.outputs_library_riker
+    outputs_library_qualimap         = NBISWEDEN_BIOVAT.out.outputs_library_qualimap
+    outputs_sample_alignments        = NBISWEDEN_BIOVAT.out.outputs_sample_alignments
+    outputs_sample_flagstat          = NBISWEDEN_BIOVAT.out.outputs_sample_flagstat
+    outputs_sample_riker             = NBISWEDEN_BIOVAT.out.outputs_sample_riker
+    outputs_sample_qualimap          = NBISWEDEN_BIOVAT.out.outputs_sample_qualimap
+    outputs_mark_duplicates          = NBISWEDEN_BIOVAT.out.outputs_mark_duplicates
+    outputs_mark_duplicates_flagstat = NBISWEDEN_BIOVAT.out.outputs_mark_duplicates_flagstat
+    outputs_mark_duplicates_riker    = NBISWEDEN_BIOVAT.out.outputs_mark_duplicates_riker
+    outputs_mark_duplicates_qualimap = NBISWEDEN_BIOVAT.out.outputs_mark_duplicates_qualimap
+    outputs_multiqc                  = NBISWEDEN_BIOVAT.out.outputs_multiqc
 
 }
 
@@ -201,18 +201,18 @@ output {
     outputs_sample_qualimap {
         path '04_merged_samples/qc/qualimap'
     }
-    // DEDUPLICATE
-    outputs_deduplication {
-        path '05_deduplicated_samples'
+    // MARK_DUPLICATES
+    outputs_mark_duplicates {
+        path '05_duplicate_processed'
     }
-    outputs_deduplicated_flagstat {
-        path '05_deduplicated_samples/qc/samtools_flagstat'
+    outputs_mark_duplicates_flagstat {
+        path '05_duplicate_processed/qc/samtools_flagstat'
     }
-    outputs_deduplicated_riker {
-        path '05_deduplicated_samples/qc/riker'
+    outputs_mark_duplicates_riker {
+        path '05_duplicate_processed/qc/riker'
     }
-    outputs_deduplicated_qualimap {
-        path '05_deduplicated_samples/qc/qualimap'
+    outputs_mark_duplicates_qualimap {
+        path '05_duplicate_processed/qc/qualimap'
     }
     // MultiQC
     outputs_multiqc {
