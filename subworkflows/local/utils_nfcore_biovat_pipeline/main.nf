@@ -54,6 +54,7 @@ workflow PIPELINE_INITIALISATION {
     //
 
     def before_text = """\033[0;92mnbisweden/biovat ${workflow.manifest.version}\033[0m
+
     """
 
     def after_text = """Log issues or questions at: \033[0;92m${workflow.manifest.homePage}/issues\033[0m
@@ -178,7 +179,7 @@ def validateInputParameters() {
         'raw_read_qc': [],
         'trim': [],
         'align': [],
-        'merge': ['align'], // TODO: should also support sorted BAM/CRAM input
+        'merge': ['align'],
         'mark_duplicates': ['merge'],
     ]
     stage_dependencies.each { step, dependencies ->

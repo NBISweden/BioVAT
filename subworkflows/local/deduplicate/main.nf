@@ -18,12 +18,11 @@ workflow DEDUPLICATE {
             ch_sample_alignments_indexed.map { meta, alignment, _index -> [ meta, alignment ] },
             ch_reference_and_fai
         )
+        ch_deduplicated_alignments = PICARD_MARKDUPLICATES.out.bam.mix(PICARD_MARKDUPLICATES.out.cram)
         SAMTOOLS_INDEX(
-            PICARD_MARKDUPLICATES.out.bam
-                .mix(PICARD_MARKDUPLICATES.out.cram)
+            ch_deduplicated_alignments
         )
-        ch_deduplicated_alignments_indexed = PICARD_MARKDUPLICATES.out.bam
-            .mix(PICARD_MARKDUPLICATES.out.cram)
+        ch_deduplicated_alignments_indexed = ch_deduplicated_alignments
             .join(SAMTOOLS_INDEX.out.index)
         ch_deduplication_metrics           = PICARD_MARKDUPLICATES.out.metrics
         ch_multiqc_files = ch_multiqc_files
