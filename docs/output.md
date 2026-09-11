@@ -125,6 +125,7 @@ Running with `--enable_cram_format` will produce `.cram` and `.crai` files inste
 - `05_deduplicated_samples/`
   - `*_markdup.bam`: Alignment files with duplicates marked (or removed, if `--enable_remove_duplicates` is set).
   - `*_markdup.bam.csi`: Index file.
+  - `*_markdup.metrics.txt`: Duplicate marking metrics.
 
 Running with `--enable_cram_format` will produce `.cram` and `.crai` files instead.
 
