@@ -14,8 +14,9 @@ workflow ALIGNMENT_QC {
     // Tag each record with a level-scoped prefix so a single modules.config selector covers every call site
     ch_qc_input = ch_alignment_and_index
         .map { meta, alignment, index ->
-            def id = level == 'library' ? meta.read_group : meta.id
-            [ meta + [ qc_prefix: "${level}_${id}" ], alignment, index ]
+            // Sample-level merging groups on {id, pl}, so include platform to avoid same-sample/different-platform filename collisions
+            def prefix = level == 'library' ? meta.read_group : "${meta.id}_${meta.pl}"
+            [ meta + [ qc_prefix: "${level}_${prefix}" ], alignment, index ]
         }
 
     // SAMTOOLS_FLAGSTAT

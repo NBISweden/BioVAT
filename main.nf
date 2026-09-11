@@ -187,9 +187,9 @@ output {
     // MERGE_LIBRARIES
     outputs_sample_alignments {
         path { meta, alignment, index ->
-            // Singletons will also be renamed by sample ID
-            alignment >> "04_merged_samples/${meta.id}.${alignment.extension}"
-            index     >> "04_merged_samples/${meta.id}.${alignment.extension}.${index.extension}"
+            // Renames singletons, includes platform to avoid file name collisions
+            alignment >> "04_merged_samples/${meta.id}_${meta.pl}.${alignment.extension}"
+            index     >> "04_merged_samples/${meta.id}_${meta.pl}.${alignment.extension}.${index.extension}"
         }
     }
     outputs_sample_flagstat {
