@@ -50,7 +50,7 @@ workflow DEDUPLICATE {
             ch_sample_alignments_indexed,
             ch_reference_and_fai,
             enable,
-            'deduplicated'
+            'markdup'
         )
         ch_multiqc_files = ch_multiqc_files
             .mix(

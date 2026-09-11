@@ -123,8 +123,8 @@ Running with `--enable_cram_format` will produce `.cram` and `.crai` files inste
 <summary>Output files</summary>
 
 - `05_deduplicated_samples/`
-  - `*._dedup.bam`: Deduplicated alignment files.
-  - `*._dedup.bam.csi`: Index file.
+  - `*_markdup.bam`: Alignment files with duplicates marked (or removed, if `--enable_remove_duplicates` is set).
+  - `*_markdup.bam.csi`: Index file.
 
 Running with `--enable_cram_format` will produce `.cram` and `.crai` files instead.
 

@@ -50,27 +50,27 @@ module_order:
       name: "Picard: duplicate marking metrics"
       anchor: "picard_markduplicates"
       path_filters:
-        - "*_dedup*"
+        - "*_markdup*"
   - samtools:
       name: "Samtools markdup: duplicate marking metrics"
       anchor: "samtools_markdup"
       path_filters:
-        - "*_dedup*"
+        - "*_markdup*"
   - samtools:
-      name: "flagstat: deduplicated alignment metrics"
-      anchor: "samtools_flagstat_sample"
+      name: "flagstat: duplicate-marked alignment metrics"
+      anchor: "samtools_flagstat_markdup"
       path_filters:
-        - "*deduplicated_*"
+        - "*markdup_*"
   - riker:
-      name: "Riker: deduplicated alignment metrics"
-      anchor: "riker_sample"
+      name: "Riker: duplicate-marked alignment metrics"
+      anchor: "riker_markdup"
       path_filters:
-        - "*deduplicated_*"
+        - "*markdup_*"
   - qualimap:
-      name: "Qualimap: deduplicated alignment metrics"
-      anchor: "qualimap_sample"
+      name: "Qualimap: duplicate-marked alignment metrics"
+      anchor: "qualimap_markdup"
       path_filters:
-        - "*deduplicated_*"
+        - "*markdup_*"
 
 custom_plot_config:
   general_stats_table:
